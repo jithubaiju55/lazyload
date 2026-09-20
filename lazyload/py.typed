@@ -1,0 +1,2 @@
+# py.typed — PEP 561 marker file.
+# Presence of this file tells type-checkers that `lazyload` ships inline types.

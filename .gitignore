@@ -1,0 +1,100 @@
+# ──────────────────────────────────────────────
+# Python-specific
+# ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Distribution / packaging
+dist/
+build/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ──────────────────────────────────────────────
+# Testing & coverage
+# ──────────────────────────────────────────────
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.pytest_cache/
+nosetests.xml
+
+# ──────────────────────────────────────────────
+# Type checkers
+# ──────────────────────────────────────────────
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyright/
+pyrightconfig.json
+
+# ──────────────────────────────────────────────
+# Linters / formatters
+# ──────────────────────────────────────────────
+.ruff_cache/
+
+# ──────────────────────────────────────────────
+# Documentation
+# ──────────────────────────────────────────────
+docs/_build/
+docs/api/
+site/
+.readthedocs.yaml   # keep if you add it intentionally
+
+# ──────────────────────────────────────────────
+# Benchmarks
+# ──────────────────────────────────────────────
+benchmarks/.benchmarks/
+benchmarks/results/
+
+# ──────────────────────────────────────────────
+# IDEs & editors
+# ──────────────────────────────────────────────
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# ──────────────────────────────────────────────
+# OS artifacts
+# ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ──────────────────────────────────────────────
+# Jupyter / IPython
+# ──────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ──────────────────────────────────────────────
+# Secrets & local config
+# ──────────────────────────────────────────────
+.env
+*.env
+.secrets
+secrets.toml
