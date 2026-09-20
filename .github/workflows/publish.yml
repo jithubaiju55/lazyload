@@ -47,7 +47,7 @@ jobs:
       id-token: write  # Mandatory for PyPI Trusted Publisher (OIDC token exchange)
     environment:
       name: pypi
-      url: https://pypi.org/p/lazyload
+      url: https://pypi.org/p/lazyload-py
     steps:
       - name: Retrieve distribution artifacts
         uses: actions/download-artifact@v4

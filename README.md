@@ -2,8 +2,8 @@
 
 > Eliminate Python startup latency caused by heavy, eager imports.
 
-[![PyPI version](https://badge.fury.io/py/lazyload.svg)](https://pypi.org/project/lazyload/)
-[![Python Versions](https://img.shields.io/pypi/pyversions/lazyload.svg)](https://pypi.org/project/lazyload/)
+[![PyPI version](https://badge.fury.io/py/lazyload-py.svg)](https://pypi.org/project/lazyload-py/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/lazyload-py.svg)](https://pypi.org/project/lazyload-py/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Coverage](https://img.shields.io/badge/coverage-93%25-brightgreen.svg)](https://github.com/jithubaiju55/lazyload)
 
@@ -61,7 +61,7 @@ Running `--help` now returns in 12 milliseconds.
 ## Installation
 
 ```bash
-pip install lazyload
+pip install lazyload-py
 ```
 
 ---
