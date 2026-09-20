@@ -26,7 +26,7 @@ from lazyload._exceptions import (
 )
 
 __version__: str = "0.1.0"
-__author__: str = "Jithu"
+__author__: str = "jithubaiju55"
 __license__: str = "MIT"
 
 __all__: list[str] = [

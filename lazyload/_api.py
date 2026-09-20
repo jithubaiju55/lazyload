@@ -58,7 +58,9 @@ else:
     # Python 3.10–3.14 — delegate to the deferred-proxy shim.
     from lazyload._compat import _lazy_compat as _backend_lazy
     from lazyload._compat import _lazy_module_compat as _backend_lazy_module
-    from lazyload._compat import _LazyImportsCompat as _backend_lazy_imports
+    from lazyload._compat import (
+        _LazyImportsCompat as _backend_lazy_imports,  # type: ignore[assignment]
+    )
 
 
 # ──────────────────────────────────────────────────────────────────────────────

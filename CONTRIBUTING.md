@@ -29,7 +29,7 @@ This project adheres to the [Contributor Covenant](https://www.contributor-coven
 
 If this is your first time contributing to an open-source Python project:
 - Don't worry if you get stuck or make a mistake! We are happy to help answer questions and guide you through the process.
-- Check out issues labeled [`good first issue`](https://github.com/jithu/lazyload/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) for beginner-friendly tasks.
+- Check out issues labeled [`good first issue`](https://github.com/jithubaiju55/lazyload/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) for beginner-friendly tasks.
 
 ---
 
@@ -37,10 +37,10 @@ If this is your first time contributing to an open-source Python project:
 
 ### 1. Fork & Clone
 
-1. Click the **Fork** button at the top-right of the [`lazyload` GitHub repository](https://github.com/jithu/lazyload).
+1. Click the **Fork** button at the top-right of the [`lazyload` GitHub repository](https://github.com/jithubaiju55/lazyload).
 2. Clone your fork to your local machine:
    ```bash
-   git clone https://github.com/YOUR-USERNAME/lazyload.git
+   git clone https://github.com/jithubaiju55/lazyload.git
    cd lazyload
    ```
 
@@ -162,4 +162,4 @@ mypy lazyload
 
 ## Getting Help
 
-If you run into any questions, feel free to open a [GitHub Issue](https://github.com/jithu/lazyload/issues) or comment directly on your active Pull Request. We're excited to collaborate with you!
+If you run into any questions, feel free to open a [GitHub Issue](https://github.com/jithubaiju55/lazyload/issues) or comment directly on your active Pull Request. We're excited to collaborate with you!

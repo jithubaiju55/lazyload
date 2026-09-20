@@ -294,7 +294,7 @@ class CircularImportError(LazyLoadError):
 # ModuleNotFoundError
 # ──────────────────────────────────────────────────────────────────────────────
 
-class ModuleNotFoundError(LazyLoadError, _BuiltinModuleNotFoundError):  # type: ignore[misc]
+class ModuleNotFoundError(LazyLoadError, _BuiltinModuleNotFoundError):  # type: ignore[misc, valid-type]
     """Raised when a lazily-deferred module does not exist when finally accessed.
 
     This exception is raised during *reification* — that is, at the moment you

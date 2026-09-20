@@ -5,7 +5,7 @@
 [![PyPI version](https://badge.fury.io/py/lazyload.svg)](https://pypi.org/project/lazyload/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/lazyload.svg)](https://pypi.org/project/lazyload/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Coverage](https://img.shields.io/badge/coverage-93%25-brightgreen.svg)](https://github.com/jithu/lazyload)
+[![Coverage](https://img.shields.io/badge/coverage-93%25-brightgreen.svg)](https://github.com/jithubaiju55/lazyload)
 
 `lazyload` defers Python module loading until the exact moment an attribute is accessed for the first time, delivering instant application startup with zero configuration.
 
