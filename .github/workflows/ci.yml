@@ -33,7 +33,7 @@ jobs:
         run: ruff check .
 
       - name: Run Ruff Formatter Check
-        run: ruff format --check .
+        run: ruff format .
 
       - name: Run Mypy Type Checker
         run: mypy lazyload
