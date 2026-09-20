@@ -91,6 +91,7 @@ _F = TypeVar("_F", bound=Callable[..., Any])
 # Internal helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def _resolve_name(name: str, package: str | None) -> str:
     """Resolve a potentially relative module name to its absolute form.
 
@@ -120,6 +121,7 @@ def _resolve_name(name: str, package: str | None) -> str:
 # ──────────────────────────────────────────────────────────────────────────────
 # Public-facing internals  (called by lazyload._lazy, ._context, ._decorator)
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def _lazy_native(name: str, package: str | None = None) -> ModuleType:
     """Return a lazy-module proxy for *name* using the Python 3.15 native API.

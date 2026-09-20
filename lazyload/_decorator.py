@@ -12,7 +12,8 @@ Example::
 
     @lazy_module
     def process(data):
-        import heavy_lib          # deferred until process() is first called
+        import heavy_lib  # deferred until process() is first called
+
         return heavy_lib.run(data)
 
 This module is internal.  Import :func:`lazyload.lazy_module` instead.

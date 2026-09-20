@@ -50,6 +50,7 @@ from lazyload._version import NATIVE_LAZY_IMPORTS, get_mode_description
 
 # --- ANSI Formatting & Visual Helpers ---
 
+
 def _supports_color() -> bool:
     """Return True if stdout supports ANSI color output."""
     if "NO_COLOR" in os.environ or "--no-color" in sys.argv:
@@ -107,6 +108,7 @@ def _format_time(ns: float) -> str:
 
 
 # --- Module Eviction Utilities ---
+
 
 def _evict_modules(module_names: list[str]) -> dict[str, Any]:
     """Remove target modules from sys.modules and return saved references."""
@@ -224,6 +226,7 @@ def benchmark_subsequent_access(iterations: int) -> dict[str, list[float]]:
 
 # --- Statistics Computation & Formatting ---
 
+
 def compute_stats(data: list[float]) -> dict[str, float]:
     """Calculate mean, min, max, stdev for a list of nanosecond samples."""
     if not data:
@@ -237,16 +240,26 @@ def compute_stats(data: list[float]) -> dict[str, float]:
 
 def print_header(iterations: int) -> None:
     """Print benchmark header and configuration box."""
-    backend_badge = green("Native PEP 810") if NATIVE_LAZY_IMPORTS else yellow("Compatibility Shim")
+    backend_badge = (
+        green("Native PEP 810") if NATIVE_LAZY_IMPORTS else yellow("Compatibility Shim")
+    )
     mode_info = get_mode_description()
 
-    print(bold(cyan("┌──────────────────────────────────────────────────────────────┐")))
-    print(bold(cyan("│                   lazyload Overhead Benchmark                │")))
-    print(bold(cyan("└──────────────────────────────────────────────────────────────┘")))
+    print(
+        bold(cyan("┌──────────────────────────────────────────────────────────────┐"))
+    )
+    print(
+        bold(cyan("│                   lazyload Overhead Benchmark                │"))
+    )
+    print(
+        bold(cyan("└──────────────────────────────────────────────────────────────┘"))
+    )
     print(f"  {bold('Python Version')} : {sys.version.split()[0]} ({sys.platform})")
     print(f"  {bold('Active Backend')}: {backend_badge}")
     print(f"  {bold('Mode Info')}     : {dim(mode_info)}")
-    print(f"  {bold('Iterations')}    : {cyan(str(iterations))} samples per test scenario")
+    print(
+        f"  {bold('Iterations')}    : {cyan(str(iterations))} samples per test scenario"
+    )
     print()
 
 
@@ -263,8 +276,8 @@ def print_scenario_results(
 
     # Table Header
     line = "├───────────────────────┼──────────────┼──────────────┼──────────────┼──────────────┤"
-    top  = "┌───────────────────────┬──────────────┬──────────────┬──────────────┬──────────────┐"
-    bot  = "└───────────────────────┴──────────────┴──────────────┴──────────────┴──────────────┘"
+    top = "┌───────────────────────┬──────────────┬──────────────┬──────────────┬──────────────┐"
+    bot = "└───────────────────────┴──────────────┴──────────────┴──────────────┴──────────────┘"
 
     print(cyan(top))
     print(
@@ -284,9 +297,9 @@ def print_scenario_results(
 
     # Eager Row
     e_mean = _format_time(eager_stats["mean"]).rjust(12)
-    e_min  = _format_time(eager_stats["min"]).rjust(12)
-    e_max  = _format_time(eager_stats["max"]).rjust(12)
-    e_std  = _format_time(eager_stats["stdev"]).rjust(12)
+    e_min = _format_time(eager_stats["min"]).rjust(12)
+    e_max = _format_time(eager_stats["max"]).rjust(12)
+    e_std = _format_time(eager_stats["stdev"]).rjust(12)
     print(
         cyan("│ ")
         + "Eager Standard".ljust(22)
@@ -303,9 +316,9 @@ def print_scenario_results(
 
     # Lazy Row
     l_mean = _format_time(lazy_stats["mean"]).rjust(12)
-    l_min  = _format_time(lazy_stats["min"]).rjust(12)
-    l_max  = _format_time(lazy_stats["max"]).rjust(12)
-    l_std  = _format_time(lazy_stats["stdev"]).rjust(12)
+    l_min = _format_time(lazy_stats["min"]).rjust(12)
+    l_max = _format_time(lazy_stats["max"]).rjust(12)
+    l_std = _format_time(lazy_stats["stdev"]).rjust(12)
     print(
         cyan("│ ")
         + yellow("lazyload Proxy").ljust(22)
@@ -328,10 +341,14 @@ def print_scenario_results(
         ratio = lazy_stats["mean"] / eager_stats["mean"]
         if ratio < 1.0:
             saved_ns = abs(mean_diff)
-            verdict = green(f"⚡ {saved_ns / 1_000:.2f} µs FASTER ({1.0/ratio:.2f}x speedup)")
+            verdict = green(
+                f"⚡ {saved_ns / 1_000:.2f} µs FASTER ({1.0 / ratio:.2f}x speedup)"
+            )
         else:
             overhead_ns = mean_diff
-            verdict = dim(f"Δ {overhead_ns / 1_000:.2f} µs difference ({ratio:.2f}x ratio)")
+            verdict = dim(
+                f"Δ {overhead_ns / 1_000:.2f} µs difference ({ratio:.2f}x ratio)"
+            )
     else:
         verdict = ""
 

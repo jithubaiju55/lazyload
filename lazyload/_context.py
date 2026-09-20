@@ -10,10 +10,10 @@ lazy_imports()
 Example::
 
     with lazy_imports():
-        import numpy as np        # not yet imported
-        import pandas as pd       # not yet imported
+        import numpy as np  # not yet imported
+        import pandas as pd  # not yet imported
 
-    df = pd.DataFrame()           # pandas is imported here, on first use
+    df = pd.DataFrame()  # pandas is imported here, on first use
 
 This module is internal.  Import :class:`lazyload.lazy_imports` instead.
 """

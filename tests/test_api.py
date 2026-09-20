@@ -51,6 +51,7 @@ _MOD_D = "textwrap"
 # Package-level exports
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestPackageExports:
     """The top-level package must export exactly the documented public surface."""
 
@@ -105,6 +106,7 @@ class TestPackageExports:
 # lazy() — single-module deferral
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestLazyFunction:
     """``lazy()`` must return a module-like proxy and defer real loading."""
 
@@ -144,8 +146,7 @@ class TestLazyFunction:
                 f"Expected a proxy, got {cls_name!r} — module was loaded eagerly"
             )
 
-    def test_attribute_access_triggers_real_load(self,
-            isolate_module: Any) -> None:
+    def test_attribute_access_triggers_real_load(self, isolate_module: Any) -> None:
         """Accessing any attribute on the proxy must trigger the real import."""
         with isolate_module(_MOD_A):
             proxy = lazy(_MOD_A)
@@ -154,12 +155,13 @@ class TestLazyFunction:
             assert callable(fn)
             assert fn([10, 20, 30]) == 20
 
-    def test_proxy_is_replaced_in_sys_modules_after_access(self,
-            isolate_module: Any) -> None:
+    def test_proxy_is_replaced_in_sys_modules_after_access(
+        self, isolate_module: Any
+    ) -> None:
         """After reification, sys.modules[name] must be the real module."""
         with isolate_module(_MOD_A):
             proxy = lazy(_MOD_A)
-            _ = proxy.mean   # trigger reification
+            _ = proxy.mean  # trigger reification
             real = sys.modules[_MOD_A]
             # The real module must not be the same object as the proxy.
             assert type(real).__name__ == "module"
@@ -177,8 +179,9 @@ class TestLazyFunction:
         result = lazy("sys")
         assert result is sys
 
-    def test_nonexistent_module_no_error_at_call_time(self,
-            isolate_module: Any) -> None:
+    def test_nonexistent_module_no_error_at_call_time(
+        self, isolate_module: Any
+    ) -> None:
         """lazy('totally_missing_xyz') must not raise at call time."""
         bad = "_lazyload_totally_missing_module_xyz"
         with isolate_module(bad):
@@ -186,8 +189,9 @@ class TestLazyFunction:
             proxy = lazy(bad)
             assert proxy is not None
 
-    def test_nonexistent_module_raises_on_attribute_access(self,
-            isolate_module: Any) -> None:
+    def test_nonexistent_module_raises_on_attribute_access(
+        self, isolate_module: Any
+    ) -> None:
         """Accessing an attribute on a proxy for a missing module must raise."""
         bad = "_lazyload_totally_missing_module_xyz"
         with isolate_module(bad):
@@ -213,6 +217,7 @@ class TestLazyFunction:
 # ──────────────────────────────────────────────────────────────────────────────
 # lazy_imports() — block-level deferral
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 class TestLazyImportsFunction:
     """``lazy_imports()`` must return a usable context manager."""
@@ -245,8 +250,9 @@ class TestLazyImportsFunction:
             pass
         assert builtins.__import__ is original
 
-    def test_multiple_modules_can_be_deferred(self, isolate_module: Any,
-            restore_import: None) -> None:
+    def test_multiple_modules_can_be_deferred(
+        self, isolate_module: Any, restore_import: None
+    ) -> None:
         """Multiple imports inside one lazy_imports() block must all be proxied."""
         with isolate_module(_MOD_A, _MOD_B):
             with lazy_imports():
@@ -271,11 +277,13 @@ class TestLazyImportsFunction:
 # lazy_module() — decorator form
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestLazyModuleDecorator:
     """``@lazy_module`` must defer imports inside a function until first call."""
 
     def test_preserves_function_name(self) -> None:
         """@lazy_module must keep the function's __name__ intact."""
+
         @lazy_module
         def my_func() -> None:
             pass
@@ -284,6 +292,7 @@ class TestLazyModuleDecorator:
 
     def test_preserves_docstring(self) -> None:
         """@lazy_module must keep the function's __doc__ intact."""
+
         @lazy_module
         def documented() -> None:
             """My docstring."""
@@ -292,6 +301,7 @@ class TestLazyModuleDecorator:
 
     def test_function_is_callable(self) -> None:
         """The decorated function must remain callable."""
+
         @lazy_module
         def noop() -> None:
             pass
@@ -300,24 +310,25 @@ class TestLazyModuleDecorator:
 
     def test_return_value_is_passed_through(self, restore_import: None) -> None:
         """The decorator must not swallow the function's return value."""
+
         @lazy_module
         def get_value() -> int:
             return 99
 
         assert get_value() == 99
 
-    def test_positional_and_keyword_args_forwarded(self,
-            restore_import: None) -> None:
+    def test_positional_and_keyword_args_forwarded(self, restore_import: None) -> None:
         """All positional and keyword arguments must reach the wrapped function."""
+
         @lazy_module
         def add(x: int, y: int = 0) -> int:
             return x + y
 
         assert add(5, y=3) == 8
 
-    def test_exception_inside_first_call_propagates(self,
-            restore_import: None) -> None:
+    def test_exception_inside_first_call_propagates(self, restore_import: None) -> None:
         """An exception raised inside the function on first call must propagate."""
+
         @lazy_module
         def explode() -> None:
             raise RuntimeError("boom")
@@ -325,14 +336,16 @@ class TestLazyModuleDecorator:
         with pytest.raises(RuntimeError, match="boom"):
             explode()
 
-    def test_import_inside_function_defers(self, isolate_module: Any,
-            restore_import: None) -> None:
+    def test_import_inside_function_defers(
+        self, isolate_module: Any, restore_import: None
+    ) -> None:
         """An import inside the decorated function must be deferred to first call."""
         import_happened: list[bool] = []
 
         @lazy_module
         def do_work() -> Any:
             import statistics as _stats
+
             import_happened.append(True)
             return _stats.mean([1, 2, 3])
 
@@ -345,8 +358,9 @@ class TestLazyModuleDecorator:
         assert result == 2
         assert import_happened == [True]
 
-    def test_second_call_does_not_re_enter_lazy_context(self,
-            restore_import: None) -> None:
+    def test_second_call_does_not_re_enter_lazy_context(
+        self, restore_import: None
+    ) -> None:
         """The lazy context must not be re-entered on the second or later call."""
         original = builtins.__import__
         enter_count = [0]

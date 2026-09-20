@@ -54,6 +54,7 @@ _BuiltinModuleNotFoundError: type[builtins.ModuleNotFoundError] = (
 # Base exception
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class LazyLoadError(Exception):
     """Base class for every exception raised by the lazyload package.
 
@@ -86,6 +87,7 @@ class LazyLoadError(Exception):
 # ──────────────────────────────────────────────────────────────────────────────
 # UnsupportedPythonVersion
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 class UnsupportedPythonVersion(LazyLoadError):
     """Raised when lazyload is running on an interpreter version below 3.10.
@@ -175,6 +177,7 @@ class UnsupportedPythonVersion(LazyLoadError):
 # ──────────────────────────────────────────────────────────────────────────────
 # CircularImportError
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 class CircularImportError(LazyLoadError):
     """Raised when a deferred import would create an unresolvable circular dependency.
@@ -294,6 +297,7 @@ class CircularImportError(LazyLoadError):
 # ModuleNotFoundError
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class ModuleNotFoundError(LazyLoadError, _BuiltinModuleNotFoundError):  # type: ignore[misc, valid-type]
     """Raised when a lazily-deferred module does not exist when finally accessed.
 
@@ -385,7 +389,7 @@ class ModuleNotFoundError(LazyLoadError, _BuiltinModuleNotFoundError):  # type: 
         # Call both parent __init__ paths.  LazyLoadError → Exception takes
         # the message; _BuiltinModuleNotFoundError sets .name for compatibility.
         super().__init__(message)
-        self.name = module_name        # matches built-in ModuleNotFoundError.name
+        self.name = module_name  # matches built-in ModuleNotFoundError.name
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}(module_name={self.module_name!r})"

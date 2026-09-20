@@ -35,6 +35,7 @@ import lazyload._version as _v
 # PYTHON_VERSION string
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestPythonVersionString:
     """``PYTHON_VERSION`` must be a well-formed ``"major.minor.micro"`` string."""
 
@@ -58,6 +59,7 @@ class TestPythonVersionString:
 # ──────────────────────────────────────────────────────────────────────────────
 # Boolean capability flags
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 class TestCapabilityFlags:
     """``NATIVE_LAZY_IMPORTS`` and ``SHIM_REQUIRED`` must be mutually exclusive."""
@@ -93,6 +95,7 @@ class TestCapabilityFlags:
 # MODE literal
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestMode:
     """``MODE`` must be a Literal string consistent with the capability flags."""
 
@@ -115,6 +118,7 @@ class TestMode:
 # ──────────────────────────────────────────────────────────────────────────────
 # get_mode_description()
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 class TestGetModeDescription:
     """``get_mode_description()`` must return a coherent human-readable string."""
@@ -144,14 +148,12 @@ class TestGetModeDescription:
         result = _v.get_mode_description()
         assert "\n" in result, "Expected a multi-line diagnostic string"
 
-    def test_native_description_mentions_pep_810(self,
-            simulate_py315: None) -> None:
+    def test_native_description_mentions_pep_810(self, simulate_py315: None) -> None:
         """On Python 3.15+, the description must reference the native path."""
         result = _v.get_mode_description()
         assert "native" in result.lower()
 
-    def test_shim_description_mentions_shim(self,
-            simulate_py310: None) -> None:
+    def test_shim_description_mentions_shim(self, simulate_py310: None) -> None:
         """On Python 3.10–3.14, the description must reference the shim."""
         result = _v.get_mode_description()
         assert "shim" in result.lower()
@@ -160,6 +162,7 @@ class TestGetModeDescription:
 # ──────────────────────────────────────────────────────────────────────────────
 # UnsupportedPythonVersion
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 class TestUnsupportedPythonVersion:
     """``UnsupportedPythonVersion`` must carry version metadata and a clear message."""
@@ -218,6 +221,7 @@ class TestUnsupportedPythonVersion:
 # CircularImportError
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestCircularImportError:
     """``CircularImportError`` must carry the cycle path and format it clearly."""
 
@@ -271,6 +275,7 @@ class TestCircularImportError:
 # ──────────────────────────────────────────────────────────────────────────────
 # lazyload.ModuleNotFoundError (double-inheritance)
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 class TestModuleNotFoundError:
     """``lazyload.ModuleNotFoundError`` must satisfy both exception hierarchies."""

@@ -67,6 +67,7 @@ else:
 # Public API functions
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def lazy(name: str, package: str | None = None) -> ModuleType:
     """Defer loading of a module until its first attribute is accessed.
 
@@ -118,7 +119,8 @@ def lazy(name: str, package: str | None = None) -> ModuleType:
 
         import lazyload
 
-        pd = lazyload.lazy("pandas")   # ← no disk I/O here
+        pd = lazyload.lazy("pandas")  # ← no disk I/O here
+
 
         def summarise(path):
             # pandas is imported here, on the first call to summarise()
@@ -178,6 +180,7 @@ def lazy_imports() -> Any:
             import scipy.signal as signal
             import matplotlib.pyplot as plt
 
+
         def plot_spectrum(data):
             # numpy, scipy, and matplotlib are loaded here on first use,
             # not at the top of the module.
@@ -233,10 +236,11 @@ def lazy_module(fn: _F) -> _F:
 
         import lazyload
 
+
         @lazyload.lazy_module
         def convert_document(path, fmt="pdf"):
-            import weasyprint          # ← deferred until convert_document()
-            import pypandoc            # ← deferred until convert_document()
+            import weasyprint  # ← deferred until convert_document()
+            import pypandoc  # ← deferred until convert_document()
 
             if fmt == "pdf":
                 return weasyprint.HTML(path).write_pdf()

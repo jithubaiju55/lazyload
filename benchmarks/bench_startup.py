@@ -69,16 +69,38 @@ except ImportError as exc:
 # ─── Terminal formatting ──────────────────────────────────────────────────────
 _USE_COLOR = sys.stdout.isatty() and os.getenv("NO_COLOR") is None
 
+
 def _c(code: str, text: str) -> str:
     return f"\033[{code}m{text}\033[0m" if _USE_COLOR else text
 
-def bold(t: str)   -> str: return _c("1",     t)
-def green(t: str)  -> str: return _c("32",    t)
-def yellow(t: str) -> str: return _c("33",    t)
-def cyan(t: str)   -> str: return _c("36",    t)
-def dim(t: str)    -> str: return _c("2",     t)
-def red(t: str)    -> str: return _c("31",    t)
-def magenta(t: str) -> str: return _c("35",  t)
+
+def bold(t: str) -> str:
+    return _c("1", t)
+
+
+def green(t: str) -> str:
+    return _c("32", t)
+
+
+def yellow(t: str) -> str:
+    return _c("33", t)
+
+
+def cyan(t: str) -> str:
+    return _c("36", t)
+
+
+def dim(t: str) -> str:
+    return _c("2", t)
+
+
+def red(t: str) -> str:
+    return _c("31", t)
+
+
+def magenta(t: str) -> str:
+    return _c("35", t)
+
 
 def _bar(fill: int, total: int = 30, char: str = "█") -> str:
     n = max(1, round(fill / total * 20)) if total > 0 else 1
@@ -88,6 +110,7 @@ def _bar(fill: int, total: int = 30, char: str = "█") -> str:
 # ─── Statistics helpers (no third-party imports) ──────────────────────────────
 def _mean(data: list[float]) -> float:
     return sum(data) / len(data)
+
 
 def _stdev(data: list[float]) -> float:
     if len(data) < 2:
@@ -112,15 +135,15 @@ def _restore(saved: dict[str, object]) -> None:
 
 # ─── Target module probing ────────────────────────────────────────────────────
 _PREFERRED = [
-    ("numpy",   "numpy.array",  "data science"),
-    ("pandas",  "pandas.DataFrame", "data science"),
-    ("torch",   "torch.Tensor", "deep learning"),
+    ("numpy", "numpy.array", "data science"),
+    ("pandas", "pandas.DataFrame", "data science"),
+    ("torch", "torch.Tensor", "deep learning"),
 ]
 
 _STDLIB_FALLBACKS = [
-    ("xml.etree.ElementTree", "xml.etree.ElementTree.parse",  "stdlib (xml)"),
-    ("sqlite3",               "sqlite3.connect",               "stdlib (sqlite3)"),
-    ("ast",                   "ast.parse",                     "stdlib (ast)"),
+    ("xml.etree.ElementTree", "xml.etree.ElementTree.parse", "stdlib (xml)"),
+    ("sqlite3", "sqlite3.connect", "stdlib (sqlite3)"),
+    ("ast", "ast.parse", "stdlib (ast)"),
 ]
 
 
@@ -157,8 +180,9 @@ def _probe_targets() -> list[Target]:
             targets.append(Target(name, attr, cat, available=True))
         elif fallback_idx < len(_STDLIB_FALLBACKS):
             fb_name, fb_attr, fb_cat = _STDLIB_FALLBACKS[fallback_idx]
-            targets.append(Target(fb_name, fb_attr, fb_cat,
-                                  available=True, is_fallback=True))
+            targets.append(
+                Target(fb_name, fb_attr, fb_cat, available=True, is_fallback=True)
+            )
             fallback_idx += 1
 
     return targets
@@ -234,21 +258,23 @@ def run_benchmark(targets: list[Target], runs: int, warmup: int) -> list[Result]
         w = warmup
         eager_ms, stdev_ms = _measure_eager(t.name, r, w)
         lazy_ms = _measure_lazy(t.name, r * 10, w)
-        results.append(Result(
-            name=t.name,
-            category=t.category,
-            is_fallback=t.is_fallback,
-            eager_ms=eager_ms,
-            lazy_ms=lazy_ms,
-            stdev_ms=stdev_ms,
-        ))
+        results.append(
+            Result(
+                name=t.name,
+                category=t.category,
+                is_fallback=t.is_fallback,
+                eager_ms=eager_ms,
+                lazy_ms=lazy_ms,
+                stdev_ms=stdev_ms,
+            )
+        )
     return results
 
 
 # ─── Output formatting ────────────────────────────────────────────────────────
 _COL = {"name": 28, "cat": 14, "eager": 14, "lazy": 12, "saved": 12, "speedup": 10}
 _SEP = "─"
-_H   = "═"
+_H = "═"
 
 
 def _rule(widths: list[int], left: str, mid: str, right: str, fill: str) -> str:
@@ -258,14 +284,18 @@ def _rule(widths: list[int], left: str, mid: str, right: str, fill: str) -> str:
 def _header_rule(widths: list[int]) -> str:
     return _rule(widths, "╔", "╦", "╗", "═")
 
+
 def _mid_rule(widths: list[int]) -> str:
     return _rule(widths, "╠", "╬", "╣", "═")
+
 
 def _body_rule(widths: list[int]) -> str:
     return _rule(widths, "╟", "╫", "╢", "─")
 
+
 def _foot_rule(widths: list[int]) -> str:
     return _rule(widths, "╚", "╩", "╝", "═")
+
 
 def _row(cells: list[str], widths: list[int]) -> str:
     parts = [f" {c:<{w}} " for c, w in zip(cells, widths, strict=False)]
@@ -286,29 +316,41 @@ def print_results(results: list[Result], runs: int) -> None:
     print()
 
     # ── Metadata ──────────────────────────────────────────────────────────────
-    print(f"  {dim('Python')}  : {bold(PYTHON_VERSION)}   "
-          f"{dim('Backend')} : {bold(MODE)}   "
-          f"{dim('lazyload')} : {bold(lazyload.__version__)}")
-    print(f"  {dim('Runs/module')} : {bold(str(runs))}   "
-          f"{dim('(+ warmup runs excluded from stats)')}")
+    print(
+        f"  {dim('Python')}  : {bold(PYTHON_VERSION)}   "
+        f"{dim('Backend')} : {bold(MODE)}   "
+        f"{dim('lazyload')} : {bold(lazyload.__version__)}"
+    )
+    print(
+        f"  {dim('Runs/module')} : {bold(str(runs))}   "
+        f"{dim('(+ warmup runs excluded from stats)')}"
+    )
     print()
 
     # ── Fallback notice ───────────────────────────────────────────────────────
     fallbacks = [r for r in results if r.is_fallback]
     if fallbacks:
-        print(yellow("  ⚠ Some preferred packages (numpy/pandas/torch) are not installed."))
-        print(yellow("    Substituting stdlib modules — gains will be smaller than real packages."))
+        print(
+            yellow(
+                "  ⚠ Some preferred packages (numpy/pandas/torch) are not installed."
+            )
+        )
+        print(
+            yellow(
+                "    Substituting stdlib modules — gains will be smaller than real packages."
+            )
+        )
         print(yellow("    Install them with:  pip install numpy pandas torch"))
         print()
 
     # ── Table ─────────────────────────────────────────────────────────────────
     cols = [
-        ("Module",         26),
-        ("Category",       13),
-        ("Eager (ms)",     11),
-        ("Lazy (ms)",      10),
-        ("Deferred (ms)",  13),
-        ("Speedup",         9),
+        ("Module", 26),
+        ("Category", 13),
+        ("Eager (ms)", 11),
+        ("Lazy (ms)", 10),
+        ("Deferred (ms)", 13),
+        ("Speedup", 9),
     ]
     widths = [w for _, w in cols]
     headers = [h for h, _ in cols]
@@ -323,9 +365,9 @@ def print_results(results: list[Result], runs: int) -> None:
             print(_body_rule(widths))
 
         name_cell = r.name + (dim(" †") if r.is_fallback else "")
-        cat_cell  = dim(r.category)
+        cat_cell = dim(r.category)
         eager_cell = bold(f"{r.eager_ms:>8.2f}")
-        lazy_cell  = green(f"{r.lazy_ms:>8.4f}")
+        lazy_cell = green(f"{r.lazy_ms:>8.4f}")
         saved_cell = yellow(f"{r.saved_ms:>9.2f}")
 
         if r.speedup == float("inf"):
@@ -336,43 +378,58 @@ def print_results(results: list[Result], runs: int) -> None:
             sp_str = f"{r.speedup:.1f}×"
         speedup_cell = magenta(sp_str.rjust(7))
 
-        print(_row([name_cell, cat_cell, eager_cell,
-                    lazy_cell, saved_cell, speedup_cell], widths))
+        print(
+            _row(
+                [name_cell, cat_cell, eager_cell, lazy_cell, saved_cell, speedup_cell],
+                widths,
+            )
+        )
         total_eager += r.eager_ms
-        total_lazy  += r.lazy_ms
+        total_lazy += r.lazy_ms
 
     print(_mid_rule(widths))
 
     # Totals row
     total_saved = max(0.0, total_eager - total_lazy)
     total_sp = total_eager / total_lazy if total_lazy > 0 else float("inf")
-    total_sp_str = (f"{total_sp:,.0f}×" if total_sp != float("inf") else "∞×")
-    print(_row([
-        bold("TOTAL"),
-        "",
-        bold(f"{total_eager:>8.2f}"),
-        green(f"{total_lazy:>8.4f}"),
-        yellow(f"{total_saved:>9.2f}"),
-        magenta(total_sp_str.rjust(7)),
-    ], widths))
+    total_sp_str = f"{total_sp:,.0f}×" if total_sp != float("inf") else "∞×"
+    print(
+        _row(
+            [
+                bold("TOTAL"),
+                "",
+                bold(f"{total_eager:>8.2f}"),
+                green(f"{total_lazy:>8.4f}"),
+                yellow(f"{total_saved:>9.2f}"),
+                magenta(total_sp_str.rjust(7)),
+            ],
+            widths,
+        )
+    )
 
     print(_foot_rule(widths))
 
     # ── Verdict ───────────────────────────────────────────────────────────────
     print()
-    verdict_ms  = f"{total_saved:.1f}ms"
-    verdict_sp  = total_sp_str
+    verdict_ms = f"{total_saved:.1f}ms"
+    verdict_sp = total_sp_str
     print(f"  {green('✓')} {bold('Verdict')}")
-    print(f"    lazyload defers {bold(yellow(verdict_ms))} of import work "
-          f"({bold(magenta(verdict_sp))} faster startup).")
+    print(
+        f"    lazyload defers {bold(yellow(verdict_ms))} of import work "
+        f"({bold(magenta(verdict_sp))} faster startup)."
+    )
     print()
     if total_saved < 10:
-        note = ("The deferred time is small — stdlib modules are lightweight by design.  "
-                "With numpy/pandas/torch the gains are typically 200ms–3 000ms per module.")
+        note = (
+            "The deferred time is small — stdlib modules are lightweight by design.  "
+            "With numpy/pandas/torch the gains are typically 200ms–3 000ms per module."
+        )
         print(f"    {dim('Note:')} {dim(note)}")
     else:
         print("    If none of those modules are used on a given run,")
-        print(f"    that {bold(yellow(verdict_ms))} is {bold('eliminated entirely')} — not just deferred.")
+        print(
+            f"    that {bold(yellow(verdict_ms))} is {bold('eliminated entirely')} — not just deferred."
+        )
     print()
 
 
@@ -382,12 +439,16 @@ def _parse_args() -> argparse.Namespace:
         description="Measure startup time improvement from using lazyload.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    p.add_argument("--runs",     type=int, default=5,
-                   help="Timed runs per module (default: 5)")
-    p.add_argument("--warmup",   type=int, default=2,
-                   help="Warm-up runs excluded from stats (default: 2)")
-    p.add_argument("--no-color", action="store_true",
-                   help="Disable ANSI colour output")
+    p.add_argument(
+        "--runs", type=int, default=5, help="Timed runs per module (default: 5)"
+    )
+    p.add_argument(
+        "--warmup",
+        type=int,
+        default=2,
+        help="Warm-up runs excluded from stats (default: 2)",
+    )
+    p.add_argument("--no-color", action="store_true", help="Disable ANSI colour output")
     return p.parse_args()
 
 

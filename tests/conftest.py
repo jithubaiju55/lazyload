@@ -31,6 +31,7 @@ if TYPE_CHECKING:
 # sys.modules isolation
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 @pytest.fixture
 def isolate_module() -> Callable[..., AbstractContextManager[None]]:
     """Return a context manager that temporarily removes named modules from
@@ -44,6 +45,7 @@ def isolate_module() -> Callable[..., AbstractContextManager[None]]:
                 ...
             # Both modules (or their absence) are restored here.
     """
+
     @contextmanager
     def _ctx(*names: str) -> Generator[None, None, None]:
         saved: dict[str, ModuleType | None] = {
@@ -65,6 +67,7 @@ def isolate_module() -> Callable[..., AbstractContextManager[None]]:
 # builtins.__import__ isolation
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 @pytest.fixture(autouse=False)
 def restore_import() -> Generator[None, None, None]:
     """Guarantee that ``builtins.__import__`` is restored after each test.
@@ -81,6 +84,7 @@ def restore_import() -> Generator[None, None, None]:
 # ──────────────────────────────────────────────────────────────────────────────
 # Version-simulation fixtures
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 @pytest.fixture
 def simulate_py310(monkeypatch: pytest.MonkeyPatch) -> None:

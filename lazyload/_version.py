@@ -106,6 +106,7 @@ MODE: Literal["native", "shim"] = "native" if NATIVE_LAZY_IMPORTS else "shim"
 # Public helper
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def get_mode_description() -> str:
     """Return a plain-English description of lazyload's active operating mode.
 

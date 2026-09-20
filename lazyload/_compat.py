@@ -97,6 +97,7 @@ _PROXY_CACHE: dict[str, _DeferredProxy] = {}
 # Internal helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def _resolve_full_name(name: str, package: str | None) -> str:
     """Return the absolute module name for *name*, resolving relative dots.
 
@@ -124,6 +125,7 @@ def _resolve_full_name(name: str, package: str | None) -> str:
 # ──────────────────────────────────────────────────────────────────────────────
 # _DeferredProxy
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 class _DeferredProxy(ModuleType):
     """A module-shaped proxy that defers the real import until first use.
@@ -249,8 +251,11 @@ class _DeferredProxy(ModuleType):
         # We skip keys that start with our sentinel prefix so bookkeeping
         # entries are preserved.
         self.__dict__.update(
-            {k: v for k, v in real.__dict__.items()
-             if not k.startswith(_SENTINEL_PREFIX)}
+            {
+                k: v
+                for k, v in real.__dict__.items()
+                if not k.startswith(_SENTINEL_PREFIX)
+            }
         )
 
         # Mark as loaded AFTER the merge so that concurrent threads that
@@ -314,6 +319,7 @@ class _DeferredProxy(ModuleType):
 # Public-facing internal functions
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def _lazy_compat(name: str, package: str | None = None) -> ModuleType:
     """Return a lazy-module proxy for *name* using the deferred-proxy shim.
 
@@ -368,7 +374,10 @@ def _lazy_compat(name: str, package: str | None = None) -> ModuleType:
 # _LazyImportsCompat — context manager
 # ──────────────────────────────────────────────────────────────────────────────
 
-def _make_lazy_importer(original: Callable[..., ModuleType]) -> Callable[..., ModuleType]:
+
+def _make_lazy_importer(
+    original: Callable[..., ModuleType],
+) -> Callable[..., ModuleType]:
     """Return a replacement for ``builtins.__import__`` that defers bare imports.
 
     The returned callable intercepts the ``import X`` pattern (bare, absolute,
@@ -547,6 +556,7 @@ class _LazyImportsCompat:
 # ──────────────────────────────────────────────────────────────────────────────
 # _lazy_module_compat — decorator
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def _lazy_module_compat(fn: _F) -> _F:
     """Decorator that defers all ``import X`` statements inside *fn*.

@@ -55,6 +55,7 @@ _TARGET_3 = "calendar"
 # _DeferredProxy — construction
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestDeferredProxyConstruction:
     """Verify that a proxy is created correctly without loading the module."""
 
@@ -76,8 +77,9 @@ class TestDeferredProxyConstruction:
             proxy = _DeferredProxy(_TARGET)
             assert proxy.__dict__["__lazyload_loaded__"] is False
 
-    def test_target_not_in_sys_modules_after_construction(self,
-            isolate_module: Any) -> None:
+    def test_target_not_in_sys_modules_after_construction(
+        self, isolate_module: Any
+    ) -> None:
         """Constructing a _DeferredProxy must not register it in sys.modules."""
         with isolate_module(_TARGET):
             _DeferredProxy(_TARGET)
@@ -106,6 +108,7 @@ class TestDeferredProxyConstruction:
 # _DeferredProxy — reification
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestDeferredProxyReification:
     """Accessing an attribute on a proxy must trigger a real import exactly once."""
 
@@ -118,8 +121,9 @@ class TestDeferredProxyReification:
             _ = proxy.mean
             assert proxy.__dict__["__lazyload_loaded__"] is True
 
-    def test_real_module_in_sys_modules_after_reification(self,
-            isolate_module: Any) -> None:
+    def test_real_module_in_sys_modules_after_reification(
+        self, isolate_module: Any
+    ) -> None:
         """After reification, sys.modules must hold the real module, not the proxy."""
         with isolate_module(_TARGET):
             proxy = _DeferredProxy(_TARGET)
@@ -130,8 +134,9 @@ class TestDeferredProxyReification:
             assert not isinstance(real, _DeferredProxy)
             assert isinstance(real, types.ModuleType)
 
-    def test_attributes_are_correct_after_reification(self,
-            isolate_module: Any) -> None:
+    def test_attributes_are_correct_after_reification(
+        self, isolate_module: Any
+    ) -> None:
         """Attributes from the real module must be accessible through the proxy."""
         with isolate_module(_TARGET):
             proxy = _DeferredProxy(_TARGET)
@@ -141,8 +146,7 @@ class TestDeferredProxyReification:
             assert callable(fn)
             assert fn([1, 2, 3]) == 2
 
-    def test_subsequent_attribute_access_is_via_dict(self,
-            isolate_module: Any) -> None:
+    def test_subsequent_attribute_access_is_via_dict(self, isolate_module: Any) -> None:
         """After first reification, subsequent access must find attrs in __dict__."""
         with isolate_module(_TARGET):
             proxy = _DeferredProxy(_TARGET)
@@ -161,8 +165,9 @@ class TestDeferredProxyReification:
             assert "[loaded]" in r.lower()
             assert "[deferred]" not in r.lower()
 
-    def test_missing_attribute_raises_attribute_error(self,
-            isolate_module: Any) -> None:
+    def test_missing_attribute_raises_attribute_error(
+        self, isolate_module: Any
+    ) -> None:
         """Accessing a non-existent attribute after reification raises AttributeError."""
         with isolate_module(_TARGET):
             proxy = _DeferredProxy(_TARGET)
@@ -170,8 +175,9 @@ class TestDeferredProxyReification:
             with pytest.raises(AttributeError, match="no attribute"):
                 _ = proxy.__totally_does_not_exist_xyz__
 
-    def test_nonexistent_module_raises_on_attribute_access(self,
-            isolate_module: Any) -> None:
+    def test_nonexistent_module_raises_on_attribute_access(
+        self, isolate_module: Any
+    ) -> None:
         """Reifying a proxy for a non-existent module must raise an error."""
         bad_name = "_lazyload_does_not_exist_at_all_xyz"
         with isolate_module(bad_name):
@@ -180,8 +186,9 @@ class TestDeferredProxyReification:
             with pytest.raises((ModuleNotFoundError, ImportError)):
                 _ = proxy.anything
 
-    def test_proxy_restored_in_sys_modules_on_import_failure(self,
-            isolate_module: Any) -> None:
+    def test_proxy_restored_in_sys_modules_on_import_failure(
+        self, isolate_module: Any
+    ) -> None:
         """If reification fails, the proxy must be put back in sys.modules."""
         bad_name = "_lazyload_does_not_exist_at_all_xyz"
         with isolate_module(bad_name):
@@ -199,9 +206,9 @@ class TestDeferredProxyReification:
         with isolate_module(_TARGET):
             proxy = _DeferredProxy(_TARGET)
             sys.modules[_TARGET] = proxy
-            _ = proxy.mean            # first reification
+            _ = proxy.mean  # first reification
             real_after_first = sys.modules[_TARGET]
-            _ = proxy.mean            # second access
+            _ = proxy.mean  # second access
             real_after_second = sys.modules[_TARGET]
             # sys.modules must hold the same object both times.
             assert real_after_first is real_after_second
@@ -211,11 +218,11 @@ class TestDeferredProxyReification:
 # _lazy_compat() function
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestLazyCompat:
     """``_lazy_compat`` must create, reuse, or skip proxies correctly."""
 
-    def test_returns_deferred_proxy_for_fresh_module(self,
-            isolate_module: Any) -> None:
+    def test_returns_deferred_proxy_for_fresh_module(self, isolate_module: Any) -> None:
         """_lazy_compat on a module not in sys.modules must return a _DeferredProxy."""
         with isolate_module(_TARGET):
             result = _lazy_compat(_TARGET)
@@ -230,8 +237,7 @@ class TestLazyCompat:
             assert sys.modules.get(_TARGET) is not None
             assert not isinstance(sys.modules[_TARGET], _DeferredProxy)
 
-    def test_returns_same_proxy_if_called_twice(self,
-            isolate_module: Any) -> None:
+    def test_returns_same_proxy_if_called_twice(self, isolate_module: Any) -> None:
         """Two calls to _lazy_compat for the same module return the same proxy."""
         with isolate_module(_TARGET):
             p1 = _lazy_compat(_TARGET)
@@ -255,18 +261,17 @@ class TestLazyCompat:
 # _LazyImportsCompat context manager
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestLazyImportsCompat:
     """The context manager must intercept bare imports and restore state on exit."""
 
-    def test_patches_builtins_import_on_enter(self,
-            restore_import: None) -> None:
+    def test_patches_builtins_import_on_enter(self, restore_import: None) -> None:
         """Inside the with block, builtins.__import__ must be replaced."""
         original = builtins.__import__
         with _LazyImportsCompat() as ctx:
             assert builtins.__import__ is not original
 
-    def test_restores_builtins_import_on_exit(self,
-            restore_import: None) -> None:
+    def test_restores_builtins_import_on_exit(self, restore_import: None) -> None:
         """After the with block, builtins.__import__ must be restored."""
         original = builtins.__import__
         with _LazyImportsCompat():
@@ -283,8 +288,9 @@ class TestLazyImportsCompat:
             pass
         assert builtins.__import__ is original
 
-    def test_from_import_is_still_eager(self, isolate_module: Any,
-            restore_import: None) -> None:
+    def test_from_import_is_still_eager(
+        self, isolate_module: Any, restore_import: None
+    ) -> None:
         """'from X import Y' inside the block must still be eager."""
         with isolate_module(_TARGET):
             with _LazyImportsCompat():
@@ -300,8 +306,7 @@ class TestLazyImportsCompat:
         with pytest.raises(RuntimeError, match="__enter__"):
             ctx.__exit__(None, None, None)
 
-    def test_nesting_restores_outer_importer(self,
-            restore_import: None) -> None:
+    def test_nesting_restores_outer_importer(self, restore_import: None) -> None:
         """Nested contexts must unwind the import stack correctly."""
         original = builtins.__import__
         with _LazyImportsCompat() as outer:
@@ -325,11 +330,13 @@ class TestLazyImportsCompat:
 # _lazy_module_compat decorator
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class TestLazyModuleCompat:
     """The decorator must defer imports on the first call only."""
 
     def test_preserves_function_name(self) -> None:
         """@_lazy_module_compat must preserve __name__ via functools.wraps."""
+
         @_lazy_module_compat
         def my_function() -> None:
             pass
@@ -338,23 +345,27 @@ class TestLazyModuleCompat:
 
     def test_preserves_function_docstring(self) -> None:
         """@_lazy_module_compat must preserve __doc__ via functools.wraps."""
+
         @_lazy_module_compat
         def documented() -> None:
             """My docstring."""
 
         assert documented.__doc__ == "My docstring."
 
-    def test_decorated_function_returns_value(self, restore_import: None,
-            isolate_module: Any) -> None:
+    def test_decorated_function_returns_value(
+        self, restore_import: None, isolate_module: Any
+    ) -> None:
         """The decorator must not swallow the return value."""
+
         @_lazy_module_compat
         def get_answer() -> int:
             return 42
 
         assert get_answer() == 42
 
-    def test_first_call_enters_lazy_context(self, restore_import: None,
-            isolate_module: Any) -> None:
+    def test_first_call_enters_lazy_context(
+        self, restore_import: None, isolate_module: Any
+    ) -> None:
         """On the first call, builtins.__import__ must be temporarily patched."""
         import_states: list[bool] = []
         original = builtins.__import__
@@ -369,8 +380,9 @@ class TestLazyModuleCompat:
             "Expected __import__ to be patched during the first call"
         )
 
-    def test_second_call_does_not_enter_lazy_context(self,
-            restore_import: None) -> None:
+    def test_second_call_does_not_enter_lazy_context(
+        self, restore_import: None
+    ) -> None:
         """On the second and subsequent calls, __import__ must NOT be patched."""
         original = builtins.__import__
         import_states: list[bool] = []
@@ -379,13 +391,14 @@ class TestLazyModuleCompat:
         def record_import_state() -> None:
             import_states.append(builtins.__import__ is not original)
 
-        record_import_state()   # first call  — patched
-        record_import_state()   # second call — not patched
-        assert import_states[0] is True,  "First call must enter lazy context"
+        record_import_state()  # first call  — patched
+        record_import_state()  # second call — not patched
+        assert import_states[0] is True, "First call must enter lazy context"
         assert import_states[1] is False, "Second call must NOT enter lazy context"
 
-    def test_exception_in_first_call_restores_import(self,
-            restore_import: None) -> None:
+    def test_exception_in_first_call_restores_import(
+        self, restore_import: None
+    ) -> None:
         """If the first call raises, __import__ must still be restored."""
         original = builtins.__import__
 
@@ -398,9 +411,9 @@ class TestLazyModuleCompat:
 
         assert builtins.__import__ is original
 
-    def test_handles_positional_and_keyword_args(self,
-            restore_import: None) -> None:
+    def test_handles_positional_and_keyword_args(self, restore_import: None) -> None:
         """The decorator must pass all args and kwargs through correctly."""
+
         @_lazy_module_compat
         def add(a: int, b: int = 0) -> int:
             return a + b
