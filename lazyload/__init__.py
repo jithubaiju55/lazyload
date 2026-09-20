@@ -24,8 +24,8 @@ from lazyload._exceptions import (
     ModuleNotFoundError,
     UnsupportedPythonVersion,
 )
+from lazyload._version import __version__
 
-__version__: str = "0.1.0"
 __author__: str = "jithubaiju55"
 __license__: str = "MIT"
 

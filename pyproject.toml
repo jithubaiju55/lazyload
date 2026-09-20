@@ -271,10 +271,6 @@ ignore = [
     "D203",   # one-blank-line-before-class (conflicts with D211)
     "D213",   # multi-line-summary-second-line (conflicts with D212)
 
-    # Annotations — self/cls never need annotations
-    "ANN101", # missing type annotation for self
-    "ANN102", # missing type annotation for cls
-
     # Commas — trailing comma in closing bracket is opinionated
     "COM812",
 

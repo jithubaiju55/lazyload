@@ -380,7 +380,7 @@ class ModuleNotFoundError(LazyLoadError, _BuiltinModuleNotFoundError):  # type: 
             f"  The module was registered as a lazy import but could not be "
             f"found when first accessed.\n"
             f"  Check that {module_name!r} is installed: "
-            f"pip show {module_name.split('.')[0]}"
+            f"pip show {module_name.split('.', maxsplit=1)[0]}"
         )
         # Call both parent __init__ paths.  LazyLoadError → Exception takes
         # the message; _BuiltinModuleNotFoundError sets .name for compatibility.

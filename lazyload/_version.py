@@ -89,6 +89,9 @@ assert NATIVE_LAZY_IMPORTS ^ SHIM_REQUIRED, (
 # Human-readable version strings
 # ──────────────────────────────────────────────────────────────────────────────
 
+#: The lazyload package version string.
+__version__: str = "0.1.0"
+
 #: The running Python version as a compact ``"major.minor.micro"`` string,
 #: e.g. ``"3.12.3"``.  Useful for logging, ``--version`` output, and error
 #: messages throughout the package.
@@ -125,9 +128,6 @@ def get_mode_description() -> str:
                            compatibility shim to provide lazy import behaviour.
           Upgrade path   : Upgrade to Python 3.15+ to use native lazy imports.
     """
-    # Import here to avoid a circular dependency with the package __init__.
-    from lazyload import __version__
-
     if NATIVE_LAZY_IMPORTS:
         mode_line = "operating in NATIVE mode"
         reason = (
