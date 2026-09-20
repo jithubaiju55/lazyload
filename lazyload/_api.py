@@ -39,11 +39,15 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from types import ModuleType
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from lazyload._version import NATIVE_LAZY_IMPORTS
 
+if TYPE_CHECKING:
+    from lazyload._types import LazyImportsProtocol
+
 _F = TypeVar("_F", bound=Callable[..., Any])
+_backend_lazy_imports: Callable[[], LazyImportsProtocol]
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Backend selection  — happens once, at import time
@@ -58,9 +62,7 @@ else:
     # Python 3.10–3.14 — delegate to the deferred-proxy shim.
     from lazyload._compat import _lazy_compat as _backend_lazy
     from lazyload._compat import _lazy_module_compat as _backend_lazy_module
-    from lazyload._compat import (
-        _LazyImportsCompat as _backend_lazy_imports,  # type: ignore[assignment]
-    )
+    from lazyload._compat import _LazyImportsCompat as _backend_lazy_imports
 
 
 # ──────────────────────────────────────────────────────────────────────────────

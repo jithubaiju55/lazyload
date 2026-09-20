@@ -187,6 +187,7 @@ omit      = [
     "lazyload/_lazy.py",      # Stub file
     "lazyload/_context.py",   # Stub file
     "lazyload/_decorator.py", # Stub file
+    "lazyload/_types.py",     # Protocol definition file
     "tests/*",
     "benchmarks/*",
 ]
@@ -383,6 +384,3 @@ show_column_numbers    = true
 pretty                 = true
 ignore_missing_imports = true
 
-[[tool.mypy.overrides]]
-module = ["tests.*", "benchmarks.*"]
-ignore_errors = true
